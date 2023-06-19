@@ -166,4 +166,7 @@
                    $"Total rooms: {totalRooms}, Used rooms: {usedRooms}")
         { }
     }
+
+    // Add 'Wall' as a member of the RoomType enumeration
+    public enum RoomType { Entrance, Sword, Wall, Pit }
 }

@@ -1,4 +1,7 @@
-﻿namespace MinotaurLabyrinth
+﻿using System;
+using System.Collections.Generic;
+
+namespace MinotaurLabyrinth
 {
     // Represents the map and what each room is made out of.
     public class Map
@@ -76,6 +79,7 @@
                 (int x, int y) = player.Location;
                 for (int i = -distance; i <= distance; ++i)
                 {
+
                     for (int j = -distance; j <= distance; ++j)
                     {
                         if (Math.Abs(i) + Math.Abs(j) <= distance)

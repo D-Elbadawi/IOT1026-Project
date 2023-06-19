@@ -50,12 +50,7 @@
     }
 
     public record DisplayDetails(string Text, System.ConsoleColor Color);
-    // Represents a location in the 2D game world, based on its row and column.
     public record Location(int Row, int Column);
-    // Represents one of the four directions of movement.
     public enum Direction { North, South, West, East }
-    // Represents the size of the game map.
     public enum Size { Small, Medium, Large };
-    // Must match class names for dynamic registering to work properly - not ideal.
-    public enum RoomType { Room, Entrance, Sword, Wall, Pit }
 }

@@ -3,6 +3,14 @@
     // Represents the player in the game.
     public class Hero
     {
+        private bool hasKey;
+
+        public bool HasKey
+        {
+            get { return hasKey; }
+            set { hasKey = value; }
+        }
+
         // Creates a new player that starts at the given location.
         public Hero(Location start) => Location = start;
         // Contains all the commands that a player can access.
@@ -35,4 +43,6 @@
             CauseOfDeath = cause;
         }
     }
+
+
 }

@@ -1,26 +1,38 @@
-﻿namespace MinotaurLabyrinth
+﻿using System;
+
+namespace MinotaurLabyrinth
 {
-    public class Sword : Room
+    public class Key : Room
     {
-        static Sword()
+        static Key()
         {
-            RoomFactory.Instance.Register(RoomType.Sword, () => new Sword());
+            RoomFactory.Instance.Register(RoomType.Key, () => new Key());
         }
-        public override RoomType Type { get; } = RoomType.Sword;
+
+        public override RoomType Type { get; } = RoomType.Key;
+
         public override DisplayDetails Display()
         {
-            return new DisplayDetails($"[{Type.ToString()[0]}]", ConsoleColor.Yellow);
+            return new DisplayDetails("[K]", ConsoleColor.Yellow);
         }
 
         public override bool DisplaySense(Hero hero, int heroDistance)
         {
             if (heroDistance == 0)
             {
-                if (hero.HasSword) ConsoleHelper.WriteLine("This is the sword room but you've already picked up the sword!", ConsoleColor.DarkCyan);
-                else ConsoleHelper.WriteLine("You can sense that the sword is nearby!", ConsoleColor.DarkCyan);
+                if (hero.HasKey)
+                {
+                    ConsoleHelper.WriteLine("This is the key room, but you've already picked up the key!", ConsoleColor.DarkCyan);
+                }
+                else
+                {
+                    ConsoleHelper.WriteLine("You can sense that the key is nearby!", ConsoleColor.DarkCyan);
+                }
                 return true;
             }
             return false;
         }
     }
+
+
 }

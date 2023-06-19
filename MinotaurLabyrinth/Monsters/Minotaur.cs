@@ -1,23 +1,17 @@
-﻿namespace MinotaurLabyrinth
+﻿using System;
+
+namespace MinotaurLabyrinth
 {
-    /// <summary>
     /// Represents a Minotaur monster in the game.
-    /// </summary>
     public class Minotaur : Monster
     {
-        /// <summary>
-        /// When activated, moves the player two spaces east (+2 columns) and one space north (-1 row),
-        /// and the minotaur moves two spaces west (-2 columns) and one space south (+1 row). However,
-        /// it ensures both player and minotaur stay within the boundaries of the map and the minotaur is in a valid room.
-        /// If the player has found the sword, the minotaur takes it and places it back in the original room.
-        /// </summary>
-        /// <param name="hero">The hero encountering the minotaur.</param>
-        /// <param name="map">The current game map.</param>
         public override void Activate(Hero hero, Map map)
         {
             const int RowMove = 1;
             const int ColMove = 2;
+
             ConsoleHelper.WriteLine("You have encountered the minotaur! He charges at you and knocks you into another room.", ConsoleColor.Magenta);
+
             if (hero.HasSword)
             {
                 hero.HasSword = false;
@@ -37,7 +31,7 @@
                 {
                     Location newLocation = Clamp(new Location(currentLocation.Row + i, currentLocation.Column - j), map.Rows, map.Columns);
                     Room room = map.GetRoomAtLocation(newLocation);
-                    if (room.Type == RoomType.Room && !room.IsActive)
+                    if (room.Type == MinotaurLabyrinth.RoomType.Room && !room.IsActive)
                     {
                         room.AddMonster(this);
                         map.GetRoomAtLocation(currentLocation).RemoveMonster();
@@ -69,8 +63,6 @@
         /// Displays sensory information about the minotaur based on the hero's distance from it.
         /// </summary>
         /// <param name="hero">The hero sensing the minotaur.</param>
-        /// <param name="heroDistance">The distance between the hero and the minotaur.</param>
-        /// <returns>Returns true if a message was displayed; otherwise, false.</returns>
         public override bool DisplaySense(Hero hero, int heroDistance)
         {
             if (heroDistance == 1)

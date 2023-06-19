@@ -1,5 +1,10 @@
-﻿/*namespace MinotaurLabyrinth
+﻿
+using System;
+
+namespace MinotaurLabyrinth
 {
+
+
     /// <summary>
     /// Represents a generic room in the labyrinth.
     /// </summary>
@@ -7,10 +12,12 @@
     {
         static Room()
         {
-            RoomFactory.Instance.Register(RoomType.Room, () => new Room());
+            RoomFactory.Instance.Register(RoomType.key, () => new Key());
         }
 
         private Monster? _monster;
+        private bool _isLocked;
+        private bool _hasKey;
 
         /// <summary>
         /// Gets the room type.
@@ -18,9 +25,18 @@
         public virtual RoomType Type { get; } = RoomType.Room;
 
         /// <summary>
-        /// Gets a value indicating whether the room is currently contains a monster or an event.
+        /// Gets a value indicating whether the room currently contains a monster or an event.
         /// </summary>
         public virtual bool IsActive { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the room is locked.
+        /// </summary>
+        public bool IsLocked
+        {
+            get { return _isLocked; }
+            set { _isLocked = value; }
+        }
 
         /// <summary>
         /// Adds a monster to the room.
@@ -39,6 +55,15 @@
         {
             IsActive = false;
             _monster = null;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the room has a key.
+        /// </summary>
+        public bool HasKey
+        {
+            get { return _hasKey; }
+            set { _hasKey = value; }
         }
 
         /// <summary>
@@ -63,6 +88,12 @@
         /// <param name="map">The current game map.</param>
         public virtual void Activate(Hero hero, Map map)
         {
+            if (IsLocked && !HasKey)
+            {
+                Console.WriteLine("The room is locked. You need a key to unlock it.");
+                return;
+            }
+
             _monster?.Activate(hero, map);
         }
 
@@ -74,8 +105,13 @@
         {
             if (_monster != null)
                 return _monster.Display();
+            else if (IsLocked)
+                return new DisplayDetails("[X]", ConsoleColor.Gray); // Display a locked room
+            else if (Type == RoomType.Sword) //
+
+                return new DisplayDetails("[K]", ConsoleColor.Yellow); // Display the sword room as [K]
             else
                 return new DisplayDetails("[ ]", ConsoleColor.Gray);
         }
     }
-}*/
+}

@@ -1,4 +1,7 @@
-﻿namespace MinotaurLabyrinth
+﻿using System;
+using System.Collections.Generic;
+
+namespace MinotaurLabyrinth
 {
     /// <summary>
     /// A static class that provides methods to create and initialize a labyrinth map with various features, such as an entrance, sword, traps, and monsters.
@@ -7,11 +10,11 @@
     {
         const int ScalingFactor = 16;
         static readonly Dictionary<Size, (int rows, int cols)> _mapSizeDimensions = new()
-    {
-        { Size.Small, (4, 4) },
-        { Size.Medium, (6, 6) },
-        { Size.Large, (8, 8) },
-    };
+        {
+            { Size.Small, (4, 4) },
+            { Size.Medium, (6, 6) },
+            { Size.Large, (8, 8) },
+        };
 
         /// <summary>
         /// Initializes the labyrinth map with the specified size, and creates a new Hero at the entrance location.

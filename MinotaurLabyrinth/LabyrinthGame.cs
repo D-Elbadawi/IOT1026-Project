@@ -11,6 +11,7 @@
 
         // Looks up what room type the player is currently in.
         public Room CurrentRoom => Map.GetRoomAtLocation(Hero.Location);
+
         // Initializes a new game round with a specific map and player.
         public LabyrinthGame(Size mapSize, int seed)
         {

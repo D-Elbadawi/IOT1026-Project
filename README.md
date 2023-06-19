@@ -10,7 +10,7 @@
 	<img title="MIT License" alt="license" src="https://img.shields.io/badge/license-MIT-informational?style=flat-square">	
     </a>
 </p>
-
+[![ci](https://github.com/D-Elbadawi/IOT1026-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/D-Elbadawi/IOT1026-Project/actions/workflows/ci.yml)
 # IOT1026-Project
 Write a description of your `Room` and `Monster` class here.
 

@@ -68,25 +68,25 @@
     // A command that represents a request to pick up the sword.
     public class GetSwordCommand : ICommand
     {
-        // Retrieves the sword if the player is in the room with the sword. Otherwise, nothing happens.
+        // Retrieves the sword if the player is in the MyMosterRoom with the sword. Otherwise, nothing happens.
         public void Execute(Hero hero, Map map)
         {
-            if (map.GetRoomTypeAtLocation(hero.Location) == RoomType.Sword)
+            if (map.GetMyMosterRoomTypeAtLocation(hero.Location) == MyMosterRoomType.Sword)
             {
                 if (hero.HasSword)
                 {
-                    ConsoleHelper.WriteLine("You've already picked up the sword from this room.", ConsoleColor.Red);
+                    ConsoleHelper.WriteLine("You've already picked up the sword from this MyMosterRoom.", ConsoleColor.Red);
                 }
                 hero.HasSword = true;
             }
             else
             {
-                ConsoleHelper.WriteLine("The sword is not in this room. There was no effect.", ConsoleColor.Red);
+                ConsoleHelper.WriteLine("The sword is not in this MyMosterRoom. There was no effect.", ConsoleColor.Red);
             }
         }
     }
 
-    // Displays all the room occurrences - for debugging and testing
+    // Displays all the MyMosterRoom occurrences - for debugging and testing
     public class DebugMapCommand : ICommand
     {
         public void Execute(Hero hero, Map map)

@@ -78,7 +78,7 @@
         {
             Location loc = new(row, col);
             // Verify the location not off map in the event 'walls' are added
-            if (map.GetRoomTypeAtLocation(loc) != RoomType.Wall)
+            if (map.GetMyMosterRoomTypeAtLocation(loc) != MyMosterRoomType.Wall)
             {
                 locations.Add(loc);
             }
@@ -161,12 +161,12 @@
             : base(message, innerException)
         { }
 
-        public CreatorException(int totalRooms, int usedRooms)
-            : base("Not enough rooms remaining in the labyrinth!\n" +
-                   $"Total rooms: {totalRooms}, Used rooms: {usedRooms}")
+        public CreatorException(int totalMyMosterRooms, int usedMyMosterRooms)
+            : base("Not enough MyMosterRooms remaining in the labyrinth!\n" +
+                   $"Total MyMosterRooms: {totalMyMosterRooms}, Used MyMosterRooms: {usedMyMosterRooms}")
         { }
     }
 
-    // Add 'Wall' as a member of the RoomType enumeration
-    public enum RoomType { Entrance, Sword, Wall, Pit }
+    // Add 'Wall' as a member of the MyMosterRoomType enumeration
+   
 }

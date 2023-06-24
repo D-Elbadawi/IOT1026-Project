@@ -1,15 +1,15 @@
 ﻿namespace MinotaurLabyrinth
 {
-    public class Wall : Room
+    public class Wall : MyMosterRoom
     {
         static Wall()
         {
-            RoomFactory.Instance.Register(RoomType.Wall, () => new Wall());
+            MyMosterRoomFactory.Instance.Register(MyMosterRoomType.Wall, () => new Wall());
         }
-        public override RoomType Type { get; } = RoomType.Wall;
+        public override MyMosterRoomType Type { get; } = MyMosterRoomType.Wall;
 
         // No need to override the Activate method here
-        public override DisplayDetails Display()
+        public override DisplayDetails Wall.Display()
         {
             return new DisplayDetails("[ ]", ConsoleColor.Black);
         }

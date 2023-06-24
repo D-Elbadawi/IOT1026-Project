@@ -1,11 +1,44 @@
-﻿
+﻿using System;
+
 namespace MinotaurLabyrinth
 {
-    public enum RoomType
+    public enum MyMosterRoomType
     {
-        Room,
-        Sword,
+        Empty,
+        Wall,
+        Entrance,
+        Exit,
         Key,
-        Minotaur
+        Monster,
+        Item,
+        Pit,
+        MyMosterMyMosterRoom,
+        Sword,
+        MyMosterRoom
+    }
+
+    public class SwordMyMosterRoom : MyMosterRoom
+    {
+        static SwordMyMosterRoom()
+        {
+            MyMosterRoomFactory.Instance.Register(MyMosterRoomType.Sword, () => new SwordMyMosterRoom());
+        }
+
+        public override MyMosterRoomType Type { get; } = MyMosterRoomType.Sword;
+
+        public override DisplayDetails Display()
+        {
+            return new DisplayDetails("[S]", ConsoleColor.DarkYellow);
+        }
+
+        public override bool DisplaySense(Hero hero, int heroDistance)
+        {
+            if (heroDistance == 0)
+            {
+                ConsoleHelper.WriteLine("This is a MyMosterRoom with a sword!", ConsoleColor.DarkCyan);
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -1,36 +1,28 @@
-﻿
-using System;
+﻿using System;
 
 namespace MinotaurLabyrinth
 {
-
-
     /// <summary>
-    /// Represents a generic room in the labyrinth.
+    /// Represents a generic MyMosterRoom in the labyrinth.
     /// </summary>
-    public class Room : IActivatable
+    public class MyMosterRoom : Room
     {
-        static Room()
-        {
-            RoomFactory.Instance.Register(RoomType.key, () => new Key());
-        }
-
         private Monster? _monster;
         private bool _isLocked;
         private bool _hasKey;
 
         /// <summary>
-        /// Gets the room type.
+        /// Gets the MyMosterRoom type.
         /// </summary>
-        public virtual RoomType Type { get; } = RoomType.Room;
+        public override MyMosterRoomType Type { get; } = MyMosterRoomType.MyMosterRoom;
 
         /// <summary>
-        /// Gets a value indicating whether the room currently contains a monster or an event.
+        /// Gets a value indicating whether the MyMosterRoom currently contains a monster or an event.
         /// </summary>
-        public virtual bool IsActive { get; protected set; }
+        public override bool IsActive { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the room is locked.
+        /// Gets or sets a value indicating whether the MyMosterRoom is locked.
         /// </summary>
         public bool IsLocked
         {
@@ -39,7 +31,7 @@ namespace MinotaurLabyrinth
         }
 
         /// <summary>
-        /// Adds a monster to the room.
+        /// Adds a monster to the MyMosterRoom.
         /// </summary>
         /// <param name="monster">The monster to be added.</param>
         public void AddMonster(Monster monster)
@@ -49,7 +41,7 @@ namespace MinotaurLabyrinth
         }
 
         /// <summary>
-        /// Removes a monster from the room.
+        /// Removes a monster from the MyMosterRoom.
         /// </summary>
         public void RemoveMonster()
         {
@@ -58,7 +50,7 @@ namespace MinotaurLabyrinth
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the room has a key.
+        /// Gets or sets a value indicating whether the MyMosterRoom has a key.
         /// </summary>
         public bool HasKey
         {
@@ -67,12 +59,12 @@ namespace MinotaurLabyrinth
         }
 
         /// <summary>
-        /// Displays sensory information about the room, based on the hero's distance from it.
+        /// Displays sensory information about the MyMosterRoom, based on the hero's distance from it.
         /// </summary>
-        /// <param name="hero">The hero sensing the room.</param>
-        /// <param name="heroDistance">The distance between the hero and the room.</param>
+        /// <param name="hero">The hero sensing the MyMosterRoom.</param>
+        /// <param name="heroDistance">The distance between the hero and the MyMosterRoom.</param>
         /// <returns>Returns true if a message was displayed; otherwise, false.</returns>
-        public virtual bool DisplaySense(Hero hero, int heroDistance)
+        public override bool DisplaySense(Hero hero, int heroDistance)
         {
             if (_monster != null)
             {
@@ -82,36 +74,53 @@ namespace MinotaurLabyrinth
         }
 
         /// <summary>
-        /// Activates the room, triggering interactions with the hero.
+        /// Activates the MyMosterRoom, triggering interactions with the hero.
         /// </summary>
-        /// <param name="hero">The hero entering the room.</param>
+        /// <param name="hero">The hero entering the MyMosterRoom.</param>
         /// <param name="map">The current game map.</param>
-        public virtual void Activate(Hero hero, Map map)
+        public override void Activate(Hero hero, Map map)
         {
             if (IsLocked && !HasKey)
             {
-                Console.WriteLine("The room is locked. You need a key to unlock it.");
+                Console.WriteLine("The MyMosterRoom is locked. You need a key to unlock it.");
                 return;
             }
 
             _monster?.Activate(hero, map);
         }
 
-        /// <summary>
-        /// Displays the current state of the room.
-        /// </summary>
-        /// <returns>Returns a DisplayDetails object containing the room's display information.</returns>
-        public virtual DisplayDetails Display()
+        /// <inheritdoc/>
+        public override string Display()
         {
-            if (_monster != null)
-                return _monster.Display();
-            else if (IsLocked)
-                return new DisplayDetails("[X]", ConsoleColor.Gray); // Display a locked room
-            else if (Type == RoomType.Sword) //
+            return IsActive ? $"[{Type.ToString()[0]}]" : base.Display();
+        }
 
-                return new DisplayDetails("[K]", ConsoleColor.Yellow); // Display the sword room as [K]
-            else
-                return new DisplayDetails("[ ]", ConsoleColor.Gray);
+        /// <summary>
+        /// Displays sensory information about the MyMosterRoom, based on the hero's distance from it.
+        /// </summary>
+        /// <param name="hero">The hero sensing the pit.</param>
+        /// <param name="heroDistance">The distance between the hero and the pit MyMosterRoom.</param>
+        /// <returns>Returns true if a message was displayed; otherwise, false.</returns>
+        public override bool DisplaySense(Hero hero, int heroDistance)
+        {
+            if (!IsActive)
+            {
+                if (base.DisplaySense(hero, heroDistance))
+                {
+                    return true;
+                }
+                if (heroDistance == 0)
+                {
+                    ConsoleHelper.WriteLine("You shudder as you recall your near-death experience with the now-defunct pit in this MyMosterRoom.", ConsoleColor.DarkGray);
+                    return true;
+                }
+            }
+            else if (heroDistance == 1 || heroDistance == 2)
+            {
+                ConsoleHelper.WriteLine(heroDistance == 1 ? "You feel a draft. There is a pit in a nearby MyMosterRoom!" : "Your intuition tells you that something dangerous is nearby.", ConsoleColor.DarkGray);
+                return true;
+            }
+            return false;
         }
     }
 }

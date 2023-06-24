@@ -1,19 +1,19 @@
 ﻿namespace MinotaurLabyrinth
 {
-    public class Entrance : Room
+    public class Entrance : MyMosterRoom
     {
         static Entrance()
         {
-            RoomFactory.Instance.Register(RoomType.Entrance, () => new Entrance());
+            MyMosterRoomFactory.Instance.Register(MyMosterRoomType.Entrance, () => new Entrance());
         }
-        public override RoomType Type { get; } = RoomType.Entrance;
+        public override MyMosterRoomType Type { get; } = MyMosterRoomType.Entrance;
         public override bool IsActive { get; protected set; } = true;
         public override void Activate(Hero hero, Map map)
         {
             if (hero.HasSword)
                 hero.IsVictorious = true;
         }
-        public override DisplayDetails Display()
+        public override DisplayDetails Entrance.Display()
         {
             return new DisplayDetails($"[{Type.ToString()[0]}]", ConsoleColor.DarkGreen);
         }
@@ -22,7 +22,7 @@
         public override bool DisplaySense(Hero hero, int heroDistance)
         {
             if (heroDistance == 0)
-                ConsoleHelper.WriteLine("You see light in this room coming from outside the labyrinth. This is the entrance.", ConsoleColor.Yellow);
+                ConsoleHelper.WriteLine("You see light in this MyMosterRoom coming from outside the labyrinth. This is the entrance.", ConsoleColor.Yellow);
             else if (heroDistance == 1)
                 ConsoleHelper.WriteLine("You hear birds chirping faintly in the distance. An entrance should be nearby.", ConsoleColor.Yellow);
             else

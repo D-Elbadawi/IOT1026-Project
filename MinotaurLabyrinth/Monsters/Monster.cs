@@ -11,7 +11,7 @@
         public bool IsAlive { get; set; } = true;
 
         /// <summary>
-        /// Activates the monster when the hero and the monster are both in the same room.
+        /// Activates the monster when the hero and the monster are both in the same MyMosterRoom.
         /// Gives the monster a chance to perform its actions.
         /// </summary>
         /// <param name="hero">The hero encountering the monster.</param>

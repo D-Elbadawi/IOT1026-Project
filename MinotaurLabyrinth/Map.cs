@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace MinotaurLabyrinth
 {
-    // Represents the map and what each room is made out of.
+    // Represents the map and what each MyMosterRoom is made out of.
     public class Map
     {
-        // The rooms are stored in a 2D array. A 3D array would allow for multiple levels in the dungeon. 
-        private readonly Room[,] _rooms;
+        // The MyMosterRooms are stored in a 2D array. A 3D array would allow for multiple levels in the dungeon. 
+        private readonly MyMosterRoom[,] _MyMosterRooms;
 
         // The total number of rows in this specific game world.
         public int Rows { get; }
@@ -15,7 +15,7 @@ namespace MinotaurLabyrinth
         // The total number of columns in this specific game world.
         public int Columns { get; }
 
-        // Debugging mode display all the rooms and monsters on the map
+        // Debugging mode display all the MyMosterRooms and monsters on the map
         public bool DebugMode { get; set; }
 
         // Creates a new map with a specific size.
@@ -23,31 +23,31 @@ namespace MinotaurLabyrinth
         {
             Rows = rows;
             Columns = columns;
-            _rooms = new Room[rows, columns];
-            // Initialize all rooms to the basic type
+            _MyMosterRooms = new MyMosterRoom[rows, columns];
+            // Initialize all MyMosterRooms to the basic type
             for (int i = 0; i < rows; ++i)
             {
                 for (int j = 0; j < columns; ++j)
                 {
-                    _rooms[i, j] = new Room();
+                    _MyMosterRooms[i, j] = new MyMosterRoom();
                 }
             }
         }
 
-        // Returns the type of room at a specific location -> returns a Wall RoomType if the location is off the map
-        public RoomType GetRoomTypeAtLocation(Location location) => GetRoomAtLocation(location).Type;
+        // Returns the type of MyMosterRoom at a specific location -> returns a Wall MyMosterRoomType if the location is off the map
+        public MyMosterRoomType GetMyMosterRoomTypeAtLocation(Location location) => GetMyMosterRoomAtLocation(location).Type;
 
-        // Returns a reference to the room object at a specific location. If the location is off the map, a Wall will be returned
-        public Room GetRoomAtLocation(Location location) => IsOnMap(location) ? _rooms[location.Row, location.Column] : new Wall();
+        // Returns a reference to the MyMosterRoom object at a specific location. If the location is off the map, a Wall will be returned
+        public MyMosterRoom GetMyMosterRoomAtLocation(Location location) => IsOnMap(location) ? _MyMosterRooms[location.Row, location.Column] : new Wall();
 
         /// <summary>
-        /// Checks if a given location has a neighboring location with the specified room type.
+        /// Checks if a given location has a neighboring location with the specified MyMosterRoom type.
         /// Neighboring locations are those that are adjacent vertically, horizontally, or diagonally.
         /// </summary>
         /// <param name="location">The location to check for neighbors.</param>
-        /// <param name="roomType">The room type to check for in neighboring locations.</param>
-        /// <returns>True if a neighboring location with the specified room type is found; otherwise, false.</returns>
-        public bool HasNeighborWithType(Location location, RoomType roomType)
+        /// <param name="MyMosterRoomType">The MyMosterRoom type to check for in neighboring locations.</param>
+        /// <returns>True if a neighboring location with the specified MyMosterRoom type is found; otherwise, false.</returns>
+        public bool HasNeighborWithType(Location location, MyMosterRoomType MyMosterRoomType)
         {
             // Define the possible neighboring location offsets
             int[] rowOffsets = { -1, -1, -1, 0, 0, 1, 1, 1 };
@@ -56,8 +56,8 @@ namespace MinotaurLabyrinth
             // Loop through the neighboring locations
             for (int i = 0; i < rowOffsets.Length; i++)
             {
-                Location neighborLocation = new(location.Row + rowOffsets[i], location.Column + colOffsets[i]);
-                if (GetRoomTypeAtLocation(neighborLocation) == roomType)
+                Location neighborLocation = new Location(location.Row + rowOffsets[i], location.Column + colOffsets[i]);
+                if (GetMyMosterRoomTypeAtLocation(neighborLocation) == MyMosterRoomType)
                 {
                     return true;
                 }
@@ -68,7 +68,7 @@ namespace MinotaurLabyrinth
         // Returns a list of Locations that are within the player's sense range
         public List<Location> GetSensableLocations(Hero player)
         {
-            List<Location> sensables = new();
+            List<Location> sensables = new List<Location>();
             int distance = player.SenseRange;
             if (distance == 0)
             {
@@ -97,12 +97,12 @@ namespace MinotaurLabyrinth
         // Indicates whether a specific location is actually on the map or not.
         public bool IsOnMap(Location location) =>
             location.Row >= 0 &&
-            location.Row < _rooms.GetLength(0) &&
+            location.Row < _MyMosterRooms.GetLength(0) &&
             location.Column >= 0 &&
-            location.Column < _rooms.GetLength(1);
+            location.Column < _MyMosterRooms.GetLength(1);
 
-        // Changes the type of room at a specific spot in the world to a new type.
-        public void SetRoomAtLocation(Location location, RoomType roomType) => _rooms[location.Row, location.Column] = RoomFactory.Instance.BuildRoom(roomType);
+        // Changes the type of MyMosterRoom at a specific spot in the world to a new type.
+        public void SetMyMosterRoomAtLocation(Location location, MyMosterRoomType MyMosterRoomType) => _MyMosterRooms[location.Row, location.Column] = MyMosterRoomFactory.Instance.BuildMyMosterRoom(MyMosterRoomType);
 
         // Displays the map on the console. If the player does not have a map, only their current location is displayed.
         public void Display(Location playerLocation, bool playerHasMap = true, bool debugMode = false)
@@ -118,16 +118,16 @@ namespace MinotaurLabyrinth
                     else
                     {
                         Location loc = new(i, j);
-                        var room = GetRoomAtLocation(loc);
+                        var MyMosterRoom = GetMyMosterRoomAtLocation(loc);
 
                         if (debugMode)
                         {
-                            ConsoleHelper.Write(room.Display());
+                            ConsoleHelper.Write(MyMosterRoom.Display());
                         }
                         else if (playerHasMap)
                         {
-                            if (room.Type == RoomType.Entrance)
-                                ConsoleHelper.Write(room.Display());
+                            if (MyMosterRoom.Type == MyMosterRoomType.Entrance)
+                                ConsoleHelper.Write(MyMosterRoom.Display());
                             else
                                 ConsoleHelper.Write("[ ]", ConsoleColor.Gray);
                         }
@@ -139,6 +139,11 @@ namespace MinotaurLabyrinth
                 }
                 Console.WriteLine();
             }
+        }
+
+        internal Room GetRoomAtLocation(Location location)
+        {
+            throw new NotImplementedException();
         }
     }
 }

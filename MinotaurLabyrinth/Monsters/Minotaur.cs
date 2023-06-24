@@ -10,7 +10,7 @@ namespace MinotaurLabyrinth
             const int RowMove = 1;
             const int ColMove = 2;
 
-            ConsoleHelper.WriteLine("You have encountered the minotaur! He charges at you and knocks you into another room.", ConsoleColor.Magenta);
+            ConsoleHelper.WriteLine("You have encountered the minotaur! He charges at you and knocks you into another MyMosterRoom.", ConsoleColor.Magenta);
 
             if (hero.HasSword)
             {
@@ -30,11 +30,11 @@ namespace MinotaurLabyrinth
                 for (int j = ColMove; j >= 0; --j)
                 {
                     Location newLocation = Clamp(new Location(currentLocation.Row + i, currentLocation.Column - j), map.Rows, map.Columns);
-                    Room room = map.GetRoomAtLocation(newLocation);
-                    if (room.Type == MinotaurLabyrinth.RoomType.Room && !room.IsActive)
+                    MyMosterRoom MyMosterRoom = map.GetMyMosterRoomAtLocation(newLocation);
+                    if (MyMosterRoom.Type == MyMosterRoomType.Empty && !MyMosterRoom.IsActive)
                     {
-                        room.AddMonster(this);
-                        map.GetRoomAtLocation(currentLocation).RemoveMonster();
+                        MyMosterRoom.AddMonster(this);
+                        map.GetMyMosterRoomAtLocation(currentLocation).RemoveMonster();
                         return;
                     }
                 }
@@ -73,10 +73,6 @@ namespace MinotaurLabyrinth
             return false;
         }
 
-        /// <summary>
-        /// Displays the current state of the minotaur.
-        /// </summary>
-        /// <returns>Returns a DisplayDetails object containing the minotaur's display information.</returns>
         public override DisplayDetails Display()
         {
             return new DisplayDetails("[M]", ConsoleColor.Red);

@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 
 namespace MinotaurLabyrinth
 {
-    public class Key : MyMosterRoom
+    public class KeyMyMosterRoom : ItemMyMosterRoom
     {
-        static Key()
+        static KeyMyMosterRoom()
         {
-            MyMosterRoomFactory.Instance.Register(MyMosterRoomType.Key, () => new Key());
+            MyMosterRoomFactory.Instance.Register(MyMosterRoomType.Key, () => new KeyMyMosterRoom());
         }
 
         public override MyMosterRoomType Type { get; } = MyMosterRoomType.Key;
 
-        public override DisplayDetails Key.Display()
+        public override DisplayDetails Display()
         {
             return new DisplayDetails("[K]", ConsoleColor.Yellow);
         }

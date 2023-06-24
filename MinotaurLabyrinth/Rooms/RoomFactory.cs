@@ -1,27 +1,27 @@
 ﻿namespace MinotaurLabyrinth
 {
     /// <summary>
-    /// A factory class for creating Room instances based on RoomType.
+    /// A factory class for creating MyMosterRoom instances based on MyMosterRoomType.
     /// </summary>
-    public sealed class RoomFactory
+    public sealed class MyMosterRoomFactory
     {
-        private RoomFactory() { }
-        private static readonly Lazy<RoomFactory> _lazy = new(() => new RoomFactory());
+        private MyMosterRoomFactory() { }
+        private static readonly Lazy<MyMosterRoomFactory> _lazy = new(() => new MyMosterRoomFactory());
 
         /// <summary>
-        /// Singleton instance of RoomFactory.
+        /// Singleton instance of MyMosterRoomFactory.
         /// </summary>
-        public static RoomFactory Instance => _lazy.Value;
+        public static MyMosterRoomFactory Instance => _lazy.Value;
 
-        private readonly Dictionary<RoomType, Func<Room>> _callbacks = new();
+        private readonly Dictionary<MyMosterRoomType, Func<MyMosterRoom>> _callbacks = new();
 
         /// <summary>
-        /// Registers a RoomType with a function that creates a Room instance.
+        /// Registers a MyMosterRoomType with a function that creates a MyMosterRoom instance.
         /// </summary>
-        /// <param name="type">The RoomType to register.</param>
-        /// <param name="createFn">The function that creates the Room instance.</param>
-        /// <returns>True if the RoomType was registered successfully, false otherwise.</returns>
-        public bool Register(RoomType type, Func<Room> createFn)
+        /// <param name="type">The MyMosterRoomType to register.</param>
+        /// <param name="createFn">The function that creates the MyMosterRoom instance.</param>
+        /// <returns>True if the MyMosterRoomType was registered successfully, false otherwise.</returns>
+        public bool Register(MyMosterRoomType type, Func<MyMosterRoom> createFn)
         {
             if (_callbacks.ContainsKey(type))
             {
@@ -33,21 +33,21 @@
         }
 
         /// <summary>
-        /// Creates a Room instance based on the given RoomType.
+        /// Creates a MyMosterRoom instance based on the given MyMosterRoomType.
         /// </summary>
-        /// <param name="type">The RoomType of the room to be created.</param>
-        /// <returns>A Room instance of the specified RoomType.</returns>
-        public Room BuildRoom(RoomType type)
+        /// <param name="type">The MyMosterRoomType of the MyMosterRoom to be created.</param>
+        /// <returns>A MyMosterRoom instance of the specified MyMosterRoomType.</returns>
+        public MyMosterRoom BuildMyMosterRoom(MyMosterRoomType type)
         {
-            if (_callbacks.TryGetValue(type, out Func<Room>? function))
+            if (_callbacks.TryGetValue(type, out Func<MyMosterRoom>? function))
             {
                 return function();
             }
 
             var atype = Type.GetType($"MinotaurLabyrinth.{type}") ?? throw new Exception($"Could not find type {type}");
-            var room = (Room)Activator.CreateInstance(atype)!;
-            Register(type, () => (Room)Activator.CreateInstance(atype)!);
-            return room;
+            var MyMosterRoom = (MyMosterRoom)Activator.CreateInstance(atype)!;
+            Register(type, () => (MyMosterRoom)Activator.CreateInstance(atype)!);
+            return MyMosterRoom;
         }
     }
 }

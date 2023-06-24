@@ -16,6 +16,8 @@ namespace MinotaurLabyrinth
             { Size.Large, (8, 8) },
         };
 
+        public static MyMosterRoom? MyMosterRoom { get; private set; }
+
         /// <summary>
         /// Initializes the labyrinth map with the specified size, and creates a new Hero at the entrance location.
         /// </summary>
@@ -48,46 +50,47 @@ namespace MinotaurLabyrinth
         {
             Location start = PlaceEntrance(map);
             PlaceSword(map, start);
-            AddRooms(RoomType.Pit, map);
+            AddMyMosterRooms(MyMosterRoomType.Pit, map);
+            AddMyMosterRooms(MyMosterRoomType.MyMosterMyMosterRoom, map);
             InitializeMonsters(map);
             return start;
         }
 
         /// <summary>
-        /// Places the entrance room at a random edge location on the map.
+        /// Places the entrance MyMosterRoom at a random edge location on the map.
         /// </summary>
-        /// <param name="map">The map on which the entrance room will be placed.</param>
-        /// <returns>The location of the placed entrance room.</returns>
+        /// <param name="map">The map on which the entrance MyMosterRoom will be placed.</param>
+        /// <returns>The location of the placed entrance MyMosterRoom.</returns>
         private static Location PlaceEntrance(Map map)
         {
             Location start = ProceduralGenerator.GetRandomEdgeLocation(map);
-            map.SetRoomAtLocation(start, RoomType.Entrance);
+            map.SetMyMosterRoomAtLocation(start, MyMosterRoomType.Entrance);
             return start;
         }
 
         /// <summary>
-        /// Places the sword room at a random location on the map that is not adjacent to the specified start location.
+        /// Places the sword MyMosterRoom at a random location on the map that is not adjacent to the specified start location.
         /// </summary>
-        /// <param name="map">The map on which the sword room will be placed.</param>
-        /// <param name="start">The start location to avoid placing the sword room adjacent to.</param>
+        /// <param name="map">The map on which the sword MyMosterRoom will be placed.</param>
+        /// <param name="start">The start location to avoid placing the sword MyMosterRoom adjacent to.</param>
         private static void PlaceSword(Map map, Location start)
         {
             Location swordLocation = ProceduralGenerator.GetRandomLocationNotAdjacentTo(start);
-            map.SetRoomAtLocation(swordLocation, RoomType.Sword);
+            map.SetMyMosterRoomAtLocation(swordLocation, MyMosterRoomType.Sword);
         }
 
         /// <summary>
-        /// Adds a specified number of rooms of the given room type to the map.
+        /// Adds a specified number of MyMosterRooms of the given MyMosterRoom type to the map.
         /// </summary>
-        /// <param name="roomType">The RoomType to be added to the map (e.g., Pit).</param>
-        /// <param name="map">The Map to which the rooms should be added.</param>
-        /// <param name="multiplier">An optional multiplier to scale the number of rooms to be added (default is 1).</param>
-        private static void AddRooms(RoomType roomType, Map map, int multiplier = 1)
+        /// <param name="MyMosterRoomType">The MyMosterRoomType to be added to the map (e.g., Pit).</param>
+        /// <param name="map">The Map to which the MyMosterRooms should be added.</param>
+        /// <param name="multiplier">An optional multiplier to scale the number of MyMosterRooms to be added (default is 1).</param>
+        private static void AddMyMosterRooms(MyMosterRoomType MyMosterRoomType, Map map, int multiplier = 1)
         {
-            int numRooms = map.Rows * map.Columns * multiplier / ScalingFactor;
-            for (int i = 0; i < numRooms; ++i)
+            int numMyMosterRooms = map.Rows * map.Columns * multiplier / ScalingFactor;
+            for (int i = 0; i < numMyMosterRooms; ++i)
             {
-                map.SetRoomAtLocation(ProceduralGenerator.GetRandomLocation(), roomType);
+                map.SetMyMosterRoomAtLocation(ProceduralGenerator.GetRandomLocation(), MyMosterRoomType);
             }
         }
 
@@ -106,11 +109,10 @@ namespace MinotaurLabyrinth
         /// </summary>
         /// <param name="map">The Map in which monsters should be initialized.</param>
         private static void InitializeMonsters(Map map)
-        {
-            // Ensure monster locations do not overlap existing locations on the map
-            Location minotaurLocation = ProceduralGenerator.GetRandomLocation();
-            Room room = map.GetRoomAtLocation(minotaurLocation);
-            room.AddMonster(new Minotaur());
-        }
+{
+    // Ensure monster locations do not overlap existing locations on the map
+    Location minotaurLocation = ProceduralGenerator.GetRandomLocation();
+    LabyrinthCreator.MyMosterRoom?.AddMonster(new Minotaur());
+}
     }
 }

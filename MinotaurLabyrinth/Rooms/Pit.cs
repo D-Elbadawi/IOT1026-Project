@@ -1,68 +1,105 @@
-﻿namespace MinotaurLabyrinth
+﻿using System;
+
+namespace MinotaurLabyrinth
 {
     /// <summary>
-    /// Represents a pit room, which contains a dangerous pit that the hero can fall into.
+    /// Represents a generic MyMosterRoom in the labyrinth.
     /// </summary>
-    public class Pit : Room
+    public class MyMosterRoom : Room
     {
-        static Pit()
-        {
-            RoomFactory.Instance.Register(RoomType.Pit, () => new Pit());
-        }
-
-        /// <inheritdoc/>
-        public override RoomType Type { get; } = RoomType.Pit;
-
-        /// <inheritdoc/>
-        public override bool IsActive { get; protected set; } = true;
+        private Monster? _monster;
+        private bool _isLocked;
+        private bool _hasKey;
 
         /// <summary>
-        /// Activates the pit, causing the hero to potentially fall in and face consequences.
+        /// Gets the MyMosterRoom type.
         /// </summary>
+        public override MyMosterRoomType Type { get; } = MyMosterRoomType.MyMosterRoom;
+
+        /// <summary>
+        /// Gets a value indicating whether the MyMosterRoom currently contains a monster or an event.
+        /// </summary>
+        public override bool IsActive { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the MyMosterRoom is locked.
+        /// </summary>
+        public bool IsLocked
+        {
+            get { return _isLocked; }
+            set { _isLocked = value; }
+        }
+
+        /// <summary>
+        /// Adds a monster to the MyMosterRoom.
+        /// </summary>
+        /// <param name="monster">The monster to be added.</param>
+        public void AddMonster(Monster monster)
+        {
+            IsActive = true;
+            _monster = monster;
+        }
+
+        /// <summary>
+        /// Removes a monster from the MyMosterRoom.
+        /// </summary>
+        public void RemoveMonster()
+        {
+            IsActive = false;
+            _monster = null;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the MyMosterRoom has a key.
+        /// </summary>
+        public bool HasKey
+        {
+            get { return _hasKey; }
+            set { _hasKey = value; }
+        }
+
+        /// <summary>
+        /// Displays sensory information about the MyMosterRoom, based on the hero's distance from it.
+        /// </summary>
+        /// <param name="hero">The hero sensing the MyMosterRoom.</param>
+        /// <param name="heroDistance">The distance between the hero and the MyMosterRoom.</param>
+        /// <returns>Returns true if a message was displayed; otherwise, false.</returns>
+        public override bool DisplaySense(Hero hero, int heroDistance)
+        {
+            if (_monster != null)
+            {
+                return _monster.DisplaySense(hero, heroDistance);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Activates the MyMosterRoom, triggering interactions with the hero.
+        /// </summary>
+        /// <param name="hero">The hero entering the MyMosterRoom.</param>
+        /// <param name="map">The current game map.</param>
         public override void Activate(Hero hero, Map map)
         {
-            if (IsActive)
+            if (IsLocked && !HasKey)
             {
-                ConsoleHelper.WriteLine("You walk into the room and the floor gives way, revealing a pit of sharp spikes adorned with other adventurers!", ConsoleColor.Red);
-                // Could update these probabilities to be based on the hero's attributes
-                double chanceOfSuccess = hero.HasSword ? 0.25 : 0.75;
-
-                if (hero.HasSword)
-                {
-                    ConsoleHelper.WriteLine("The sword goes flying as you wildly flail your arms, desperately trying to get hold of the pit's edge.", ConsoleColor.DarkMagenta);
-                    hero.HasSword = false;
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("You wildly flail your arms, desperately trying to get hold of the pit's edge.", ConsoleColor.DarkMagenta);
-                }
-
-                if (RandomNumberGenerator.NextDouble() < chanceOfSuccess)
-                {
-                    IsActive = false;
-                    ConsoleHelper.WriteLine("You manage to grab the side of the pit and pull yourself onto safe ground.", ConsoleColor.Green);
-                    ConsoleHelper.WriteLine("Looking around, you find a mechanism that closes the spikes in the pit. This room is now safe.", ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("Your hand slips, and you plummet down towards the spikes.", ConsoleColor.DarkRed);
-                    hero.Kill("You have fallen into a pit and died.");
-                }
+                Console.WriteLine("The MyMosterRoom is locked. You need a key to unlock it.");
+                return;
             }
+
+            _monster?.Activate(hero, map);
         }
 
         /// <inheritdoc/>
-        public override DisplayDetails Display()
+        public override string Display()
         {
-            return IsActive ? new DisplayDetails($"[{Type.ToString()[0]}]", ConsoleColor.Red)
-                            : base.Display();
+            return IsActive ? $"[{Type.ToString()[0]}]" : base.Display();
         }
 
         /// <summary>
-        /// Displays sensory information about the pit, based on the hero's distance from it.
+        /// Displays sensory information about the MyMosterRoom, based on the hero's distance from it.
         /// </summary>
-        /// <param name="hero">The hero sensing the pit.</param>
-        /// <param name="heroDistance">The distance between the hero and the pit room.</param>
+        /// <param name="hero">The hero sensing the MyMosterRoom.</param>
+        /// <param name="heroDistance">The distance between the hero and the MyMosterRoom.</param>
         /// <returns>Returns true if a message was displayed; otherwise, false.</returns>
         public override bool DisplaySense(Hero hero, int heroDistance)
         {
@@ -74,13 +111,13 @@
                 }
                 if (heroDistance == 0)
                 {
-                    ConsoleHelper.WriteLine("You shudder as you recall your near-death experience with the now-defunct pit in this room.", ConsoleColor.DarkGray);
+                    ConsoleHelper.WriteLine("You shudder as you recall your near-death experience with the now-defunct pit in this MyMosterRoom.", ConsoleColor.DarkGray);
                     return true;
                 }
             }
             else if (heroDistance == 1 || heroDistance == 2)
             {
-                ConsoleHelper.WriteLine(heroDistance == 1 ? "You feel a draft. There is a pit in a nearby room!" : "Your intuition tells you that something dangerous is nearby.", ConsoleColor.DarkGray);
+                ConsoleHelper.WriteLine(heroDistance == 1 ? "You feel a draft. There is a pit in a nearby MyMosterRoom!" : "Your intuition tells you that something dangerous is nearby.", ConsoleColor.DarkGray);
                 return true;
             }
             return false;

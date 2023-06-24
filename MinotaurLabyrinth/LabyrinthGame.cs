@@ -9,8 +9,8 @@
         // The player playing the game.
         public Hero Hero { get; }
 
-        // Looks up what room type the player is currently in.
-        public Room CurrentRoom => Map.GetRoomAtLocation(Hero.Location);
+        // Looks up what MyMosterRoom type the player is currently in.
+        public Room CurrentMyMosterRoom => Map.GetMyMosterRoomAtLocation(Hero.Location);
 
         // Initializes a new game round with a specific map and player.
         public LabyrinthGame(Size mapSize, int seed)
@@ -32,13 +32,13 @@
                 {
                     Location currentLocation = Hero.Location;
                     command.Execute(Hero, Map);
-                    CurrentRoom.Activate(Hero, Map);
-                    // If the room interaction moves the player
-                    // Activate the room the player has been moved to
+                    CurrentMyMosterRoom.Activate(Hero, Map);
+                    // If the MyMosterRoom interaction moves the player
+                    // Activate the MyMosterRoom the player has been moved to
                     while (currentLocation != Hero.Location)
                     {
                         currentLocation = Hero.Location;
-                        CurrentRoom.Activate(Hero, Map);
+                        CurrentMyMosterRoom.Activate(Hero, Map);
                     }
                 }
                 Display.ScreenUpdate(Hero, Map);
